@@ -2,6 +2,8 @@ const { v4: uuidv4 } = require('uuid');
 const persons = require('../data/persons.json');
 const { writeData } = require('../crud');
 
+const DATA_PATH = './src/data/persons.json';
+
 const getAll = () => {
   return Promise.resolve(persons);
 };
@@ -15,7 +17,7 @@ const createItem = (data) => {
     const newItem = { id: uuidv4(), ...data };
     persons.push(newItem);
 
-    writeData('./data/persons.json', persons);
+    writeData(DATA_PATH, persons);
     resolve(newItem);
   });
 };
@@ -26,7 +28,7 @@ const updateItem = (id, data) => {
 
     persons[updatedIdx] = {id, ...data};
 
-    writeData('./data/persons.json', persons);
+    writeData(DATA_PATH, persons);
     resolve(persons[updatedIdx]);
   });
 };
@@ -35,7 +37,7 @@ const deleteItem = (id) => {
   return new Promise((resolve, reject) => {
     const updatedPersons = persons.filter(person => person.id !== id);
 
-    writeData('./data/persons.json', updatedPersons);
+    writeData(DATA_PATH, updatedPersons);
     resolve();
   });
 };

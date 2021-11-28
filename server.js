@@ -2,7 +2,7 @@ const http = require('http');
 const url = require('url');
 require('dotenv').config();
 
-const { getPersons, getPerson, createPerson, updatePerson, deletePerson } = require('./services/person');
+const { getPersons, getPerson, createPerson, updatePerson, deletePerson } = require('./src/services/person');
 
 const server = http.createServer(async (req, res) => {
 
@@ -31,3 +31,5 @@ const server = http.createServer(async (req, res) => {
 const PORT = process.env.PORT || '8080';
 
 server.listen(PORT, () => console.log(`server is starting listen ${PORT} port`));
+
+module.exports = server;
