@@ -8,7 +8,8 @@ const getPersons = async (req, res) => {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify(persons));
   } catch (error) {
-    console.log(error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: error.message }));
   }
 };
 
@@ -32,7 +33,6 @@ const getPerson = async (req, res, id) => {
       res.end(JSON.stringify({ message: 'Person not found' }));
     }
   } catch (error) {
-    console.log(error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: error.message }));
   }
@@ -62,7 +62,6 @@ const createPerson = async (req, res) => {
     res.writeHead(201, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify(newItem));
   } catch (error) {
-    console.log(error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: error.message }));
   }
@@ -108,7 +107,6 @@ const updatePerson = async (req, res, id) => {
       res.end(JSON.stringify({ message: 'Person not found' }));
     }
   } catch (error) {
-    console.log(error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: error.message }));
   }
@@ -135,7 +133,6 @@ const deletePerson = async (req, res, id) => {
       res.end(JSON.stringify({ message: 'Person not found' }));
     }
   } catch (error) {
-    console.log(error);
     res.writeHead(500, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ message: error.message }));
   }
