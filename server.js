@@ -9,17 +9,17 @@ const server = http.createServer(async (req, res) => {
   let parsedUrl = url.parse(req.url, true);
   const path = parsedUrl.pathname.replace(/^\/+|\/+$/g, '');
 
-  if (path === 'persons' && req.method === 'GET') {
+  if (path === 'person' && req.method === 'GET') {
     getPersons(req, res);
-  } else if (path.match(/persons\/([0-9]+)/) && req.method === 'GET') {
+  } else if (path.match(/person\/([0-9]+)/) && req.method === 'GET') {
     const id = req.url.split('/')[2];
     getPerson(req, res, id);
-  } else if (path === 'persons' && req.method === 'POST') {
+  } else if (path === 'person' && req.method === 'POST') {
     createPerson(req, res);
-  } else if (path.match(/persons\/([0-9]+)/) && req.method === 'PUT') {
+  } else if (path.match(/person\/([0-9]+)/) && req.method === 'PUT') {
     const id = req.url.split('/')[2];
     updatePerson(req, res, id);
-  } else if (path.match(/persons\/([0-9]+)/) && req.method === 'DELETE') {
+  } else if (path.match(/person\/([0-9]+)/) && req.method === 'DELETE') {
     const id = req.url.split('/')[2];
     deletePerson(req, res, id);
   } else {

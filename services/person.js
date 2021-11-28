@@ -1,5 +1,5 @@
 const Person = require('../models/person');
-const { validateBody, getFormattedBody } = require('../crud');
+const { validateBody, getFormattedBody, validateId } = require('../crud');
 
 const getPersons = async (req, res) => {
   try {
@@ -14,6 +14,14 @@ const getPersons = async (req, res) => {
 
 const getPerson = async (req, res, id) => {
   try {
+    const errorMessage = await validateId(id);
+
+    if (errorMessage) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(errorMessage));
+      return;
+    }
+
     const person = await Person.getById(id);
 
     if (person) {
@@ -25,6 +33,8 @@ const getPerson = async (req, res, id) => {
     }
   } catch (error) {
     console.log(error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: error.message }));
   }
 };
 
@@ -33,7 +43,13 @@ const createPerson = async (req, res) => {
     const body = await getFormattedBody(req);
 
     const { name, age, hobbies } = JSON.parse(body);
-    const validationMessage = validateBody({ name, age, hobbies });
+    const errorMessageBody = await validateBody({ name, age, hobbies });
+    
+    if (errorMessageBody) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(errorMessageBody));
+      return;
+    }
 
     const data = {
       name,
@@ -47,18 +63,35 @@ const createPerson = async (req, res) => {
     return res.end(JSON.stringify(newItem));
   } catch (error) {
     console.log(error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: error.message }));
   }
 };
 
 const updatePerson = async (req, res, id) => {
   try {
+    const errorMessage = await validateId(id);
+
+    if (errorMessage) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(errorMessage));
+      return;
+    }
+
     const item = await Person.getById(id);
 
     if (item) {
       const body = await getFormattedBody(req);
 
       const { name, age, hobbies } = JSON.parse(body);
-      const validationMessage = validateBody({ name, age, hobbies });
+
+      const errorMessageBody = await validateBody({ name, age, hobbies });
+
+      if (errorMessageBody) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(errorMessageBody));
+        return;
+      }
   
       const data = {
         name: name || item.name,
@@ -76,11 +109,21 @@ const updatePerson = async (req, res, id) => {
     }
   } catch (error) {
     console.log(error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: error.message }));
   }
 };
 
 const deletePerson = async (req, res, id) => {
   try {
+    const errorMessage = await validateId(id);
+
+    if (errorMessage) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(errorMessage));
+      return;
+    }
+
     const person = await Person.getById(id);
 
     if (person) {
@@ -93,6 +136,8 @@ const deletePerson = async (req, res, id) => {
     }
   } catch (error) {
     console.log(error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: error.message }));
   }
 };
 
